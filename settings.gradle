@@ -1,0 +1,2 @@
+rootProject.name='Nuokkari App'
+include ':app'
