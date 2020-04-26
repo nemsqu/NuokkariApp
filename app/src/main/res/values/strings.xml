@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Nuokkari App</string>
+    <string name="tapahtumat">Tapahtumat</string>
+    <string name="kayttaja">Käyttäjä</string>
+    <string name="lis_tapahtuma">LISÄÄ TAPAHTUMA</string>
+    <string name="kirjaudu_sis_n">KIRJAUDU SISÄÄN</string>
+    <string name="title_activity_login">Kirjaudu sisään</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Salasana</string>
+    <string name="prompt_name">Nimi</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_register">Luo käyttäjä</string>
+    <string name="new_user">Luo uusi käyttäjä</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Kirjautuminen epäonnistui"</string>
 </resources>
