@@ -1,4 +1,4 @@
-package com.example.nuokkariapp.UserInfoUI;
+package com.example.nuokkariapp.UserInfo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.nuokkariapp.MainActivity;
 import com.example.nuokkariapp.R;
 
 public class LoginActivity extends AppCompatActivity {
@@ -16,6 +17,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView register;
     TextView email;
     TextView password;
+    UserLocalStorage userLocalStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,10 +27,15 @@ public class LoginActivity extends AppCompatActivity {
         register = (TextView) findViewById(R.id.textViewNewUser);
         email = (TextView) findViewById(R.id.editTextLoginEmail);
         password = (TextView) findViewById(R.id.editTextLoginPassword);
+        userLocalStorage = new UserLocalStorage(this);
     }
 
     public void login(View v){
-
+        User user = new User(email.getText().toString(), password.getText().toString());
+        userLocalStorage.storeUserData(user);
+        userLocalStorage.setUserLoggedIn(true);
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     public void register(View v){

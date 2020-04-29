@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="20dp">
+
+        <TextView
+            android:id="@+id/titleEvent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tapahtuma"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/titleName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/prompt_name"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/eventName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/titleLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sijainti"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/eventLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/titleDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/p_iv_m_r"
+            android:textSize="18sp" />
+        <EditText
+            android:id="@+id/eventDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:inputType="date" />
+
+        <TextView
+            android:id="@+id/titleStartTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/alkuaika"
+            android:textSize="18sp"/>
+        <EditText
+            android:id="@+id/eventStartTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:inputType="time" />
+
+        <TextView
+            android:id="@+id/titleEndTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/loppuaika"
+            android:textSize="18sp"/>
+        <EditText
+            android:id="@+id/eventEndTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:inputType="time" />
+
+        <TextView
+            android:id="@+id/titleAge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ik_haarukka_lk"
+            android:textSize="18sp"/>
+        <EditText
+            android:id="@+id/eventAge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/titleDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/kuvaus"
+            android:textSize="18sp"/>
+        <EditText
+            android:id="@+id/eventDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:inputType="textMultiLine" />
+
+        <Button
+            android:id="@+id/buttonSaveEvent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="addEvent"
+            android:text="Lisää tapahtuma"
+            android:focusable="true" />
+
+    </LinearLayout>
+</ScrollView>
