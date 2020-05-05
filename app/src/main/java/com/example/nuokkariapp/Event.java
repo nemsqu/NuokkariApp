@@ -1,20 +1,16 @@
 package com.example.nuokkariapp;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Event implements Serializable {
 
-    private String name;
-    private String location;
-    private String date;
-    private String start;
-    private String end;
-    private String age;
-    private String description;
-    private int index = 0;
+    private String name, location, date, start, end, age, description, imageUri;
+    private int index, visitorLimit, visitorCount, ID;
     private boolean isOnGoing = false;
+    ArrayList<Feedback> eventFeedbacks;
 
-    public Event(String name, String location, String date, String start, String end, String age, String description){
+    public Event(String name, String location, String date, String start, String end, String age, int limit, String description, String uri, int ID){
         this.name = name;
         this.location = location;
         this.date = date;
@@ -22,11 +18,11 @@ public class Event implements Serializable {
         this.end = end;
         this.age = age;
         this.description = description;
-    }
-
-    public void addToFile(){
-
-
+        this.visitorLimit = limit;
+        this.visitorCount = 0;
+        eventFeedbacks = new ArrayList<>();
+        imageUri = uri;
+        this.ID = ID;
     }
 
     public String getAge() {
@@ -99,5 +95,50 @@ public class Event implements Serializable {
 
     public void setOnGoing(boolean onGoing) {
         isOnGoing = onGoing;
+    }
+
+    public void setVisitorCount(int visitorCount) {
+        this.visitorCount = visitorCount;
+    }
+
+    public int getVisitorCount() {
+        return visitorCount;
+    }
+
+    public int getVisitorLimit() {
+        return visitorLimit;
+    }
+
+    public void setVisitorLimit(int visitorLimit) {
+        this.visitorLimit = visitorLimit;
+    }
+
+    public void addFeedbackToEvent(Feedback fb){
+        eventFeedbacks.add(fb);
+    }
+
+    public void modifyFeedbackOnList(Feedback feedback, int index){
+        eventFeedbacks.add(index, feedback);
+        eventFeedbacks.remove(index + 1);
+    }
+
+    public ArrayList<Feedback> getEventFeedbacks(){
+        return eventFeedbacks;
+    }
+
+    public void setEventFeedbacks(ArrayList<Feedback> eventFeedbacks) {
+        this.eventFeedbacks = eventFeedbacks;
+    }
+
+    public void setImageURI(String imageURI) {
+        this.imageUri = imageURI;
+    }
+
+    public String getImageURI() {
+        return imageUri;
+    }
+
+    public int getID() {
+        return ID;
     }
 }

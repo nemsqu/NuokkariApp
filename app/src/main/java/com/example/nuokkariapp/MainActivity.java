@@ -4,34 +4,33 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.example.nuokkariapp.UserInfo.LoginActivity;
 import com.example.nuokkariapp.UserInfo.ProfileActivity;
-import com.example.nuokkariapp.UserInfo.User;
 import com.example.nuokkariapp.UserInfo.UserLocalStorage;
+import java.util.ArrayList;
 
-import java.io.Serializable;
 
-
-public class MainActivity extends AppCompatActivity implements myAdapter.OnEventListener {
+public class MainActivity extends AppCompatActivity implements EventViewAdapter.OnEventListener {
 
     TextView titleEvents, titleUser, userName, userEmail;
     RecyclerView recyclerView;
     ImageView profilePic;
     boolean signedIn = false;
-    Button addEvent, userInfo;
+    Button addEvent, userInfo, search;
     UserLocalStorage userLocalStorage;
     ConstraintLayout layout;
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.Adapter rvAdapter;
     EventCollection eventCollection;
+    EditText searchBox;
 
 
     @Override
@@ -46,68 +45,76 @@ public class MainActivity extends AppCompatActivity implements myAdapter.OnEvent
         addEvent = (Button) findViewById(R.id.buttonAddNewEvent);
         userInfo = (Button) findViewById(R.id.buttonEditInfo);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        search = (Button) findViewById(R.id.buttonSearch);
+        searchBox = (EditText) findViewById(R.id.searchBox);
         eventCollection = EventCollection.getInstance();
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        rvAdapter = new myAdapter(eventCollection.getEventArrayList(), this);
+        rvAdapter = new EventViewAdapter(eventCollection.getEventArrayList(), this);
         recyclerView.setAdapter(rvAdapter);
+        userLocalStorage = UserLocalStorage.getInstance();
         if(!signedIn){
             userName.setText("");
             userEmail.setText("");
             userInfo.setText("KIRJAUDU SISÄÄN");
+        }else{
+            userName.setText(userLocalStorage.getLoggedInUser().getName());
+            userEmail.setText(userLocalStorage.getLoggedInUser().getEmail());
+            userInfo.setText("MUOKKAA TIETOJA");
         }
         layout = (ConstraintLayout) findViewById(R.id.layout);
-        userLocalStorage = new UserLocalStorage(this);
     }
 
     public void createEvent(View v){
+        Event event = new Event("", "", "", "", "", "", 200, "", "", 0);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("event", event);
         Intent intent = new Intent(this, AddEventActivity.class);
-        intent.putExtra("collection", (Serializable) eventCollection);
+        intent.putExtras(bundle);
+        intent.putExtra("reused", false);
+        startActivity(intent);
+    }
+
+    public void reuseEvent(View v){
+        Intent intent = new Intent(this, ReuseEventActivity.class);
         startActivity(intent);
     }
 
     //button pressed to either sign in or to modify user information
     public void userInfo(View v){
         if(signedIn){
-            modifyUserInfo();
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
         }else{
-            signIn();
-            User loggedInUser = userLocalStorage.getCurrentUser();
-            userName.setText(loggedInUser.getName());
-            userEmail.setText(loggedInUser.getEmail());
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
         }
     }
 
-    public void signIn(){
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-
-    }
-
-    public void modifyUserInfo(){
-        Intent intent = new Intent(this, ProfileActivity.class);
-        startActivity(intent);
-    }
-
-    public void logOut(){
-        userLocalStorage.clearUserData();
-        userLocalStorage.setUserLoggedIn(false);
-        signedIn = false;
-        layout.removeView(findViewById(R.id.logOut));
-    }
 
     public void onStart() {
         super.onStart();
-        rvAdapter = new myAdapter(eventCollection.getEventArrayList(), this);
+        rvAdapter = new EventViewAdapter(eventCollection.getEventArrayList(), this);
         recyclerView.setAdapter(rvAdapter);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        signedIn = userLocalStorage.isLoggedIn();
+        if(!signedIn){
+            userName.setText("");
+            userEmail.setText("");
+            userInfo.setText("KIRJAUDU SISÄÄN");
+        }else {
+            userName.setText(userLocalStorage.getLoggedInUser().getName());
+            userEmail.setText(userLocalStorage.getLoggedInUser().getEmail());
+            userInfo.setText("MUOKKAA TIETOJA");
+        }
     }
 
 
+    //open event from recyclerview according to its state when it is clicked
     @Override
     public void onEventClick(int position) {
-        if(eventCollection.getEventArrayList().size() != 1) {
-            Event chosenEvent = eventCollection.getEventArrayList().get(position + 1); //+1 because first event is not shown
+            Event chosenEvent = eventCollection.getEventArrayList().get(position);
             if(chosenEvent.isOnGoing()){
                 Intent intent = new Intent(this, OnGoingEventActivity.class);
                 Bundle bundle = new Bundle();
@@ -118,10 +125,27 @@ public class MainActivity extends AppCompatActivity implements myAdapter.OnEvent
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("chosenEvent", chosenEvent);
                 Intent intent = new Intent(this, EventInfoActivity.class);
-                intent.putExtras(bundle); //MODIFY EVENTACTIVITY TO GET THE EVENT & SHOW INFO
+                intent.putExtras(bundle);
                 intent.putExtra("position", position + 1);
                 startActivity(intent);
             }
+    }
+
+    //search events by description
+    public void search(View v){
+        String text = searchBox.getText().toString();
+        ArrayList<Event> events = EventCollection.getInstance().getEventArrayList();
+        ArrayList<Event> filteredEvents = new ArrayList<>();
+        if(text.equals("")){
+            filteredEvents.addAll(events);
+        }else {
+            for (Event event : events) {
+                if (event.getDescription().contains(text)) {
+                    filteredEvents.add(event);
+                }
+            }
         }
+        rvAdapter = new EventViewAdapter(filteredEvents, this);
+        recyclerView.setAdapter(rvAdapter);
     }
 }

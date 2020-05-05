@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
     <LinearLayout
@@ -14,6 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/tapahtuma"
+            android:textColor="#000000"
             android:textSize="30sp"
             android:textStyle="bold" />
 
@@ -21,7 +24,7 @@
             android:id="@+id/titleName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/prompt_name"
+            android:text="Nimi *"
             android:textSize="18sp" />
 
         <EditText
@@ -35,7 +38,7 @@
             android:id="@+id/titleLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/sijainti"
+            android:text="Sijainti *"
             android:textSize="18sp" />
 
         <EditText
@@ -49,7 +52,7 @@
             android:id="@+id/titleDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/p_iv_m_r"
+            android:text="Päivämäärä *"
             android:textSize="18sp" />
         <EditText
             android:id="@+id/eventDate"
@@ -62,7 +65,7 @@
             android:id="@+id/titleStartTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/alkuaika"
+            android:text="Alkuaika *"
             android:textSize="18sp"/>
         <EditText
             android:id="@+id/eventStartTime"
@@ -75,7 +78,7 @@
             android:id="@+id/titleEndTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/loppuaika"
+            android:text="Loppuaika *"
             android:textSize="18sp"/>
         <EditText
             android:id="@+id/eventEndTime"
@@ -88,7 +91,7 @@
             android:id="@+id/titleAge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/ik_haarukka_lk"
+            android:text="Ikähaarukka *"
             android:textSize="18sp"/>
         <EditText
             android:id="@+id/eventAge"
@@ -98,10 +101,25 @@
             android:inputType="text" />
 
         <TextView
+            android:id="@+id/titleVisitorLimit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Kävijämäärä (max)"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/eventVisitorLimit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number" />
+
+
+        <TextView
             android:id="@+id/titleDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/kuvaus"
+            android:text="Kuvaus *"
             android:textSize="18sp"/>
         <EditText
             android:id="@+id/eventDescription"
@@ -109,6 +127,97 @@
             android:layout_height="wrap_content"
             android:autofillHints=""
             android:inputType="textMultiLine" />
+
+        <TextView
+            android:id="@+id/titlePicture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Kuva" />
+
+        <ImageView
+            android:id="@+id/eventPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <Button
+            android:id="@+id/buttonAddPhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="addPicture"
+            android:text="Lisää kuva" />
+
+        <TextView
+            android:id="@+id/titleRecurrence"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:text="Tee tapahtumasta toistuva"
+            android:textSize="18sp"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/answerNever"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:text="Ei toistu"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/answerDaily"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:text="Päivittäin"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/answerWeekly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:text="Viikoittain"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/answerMonthly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kuukausittain"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <SeekBar
+            android:id="@+id/seekBarRecurrence"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:max="3"
+            android:onClick="register"
+            android:progress="0" />
+
+        <TextView
+            android:id="@+id/textViewEndDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Asti"
+            android:textSize="18sp"/>
+        <Button
+            android:id="@+id/buttonChooseDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:text="Valitse päivä"
+            android:clickable="true"
+            android:focusable="true"/>
+
 
         <Button
             android:id="@+id/buttonSaveEvent"
@@ -122,9 +231,18 @@
             android:id="@+id/buttonStartEvent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
             android:clickable="true"
             android:onClick="startEvent"
             android:text="@string/k_ynnist_tapahtuma" />
+
+        <Button
+            android:id="@+id/buttonBackToFrontPage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:clickable="true"
+            android:onClick="toFrontPage"
+            android:text="Etusivulle" />
+
     </LinearLayout>
 </ScrollView>

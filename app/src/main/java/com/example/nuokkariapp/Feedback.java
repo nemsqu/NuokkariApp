@@ -1,8 +1,10 @@
 package com.example.nuokkariapp;
 
-class Feedback {
+import java.io.Serializable;
 
-    String givenFeedback, writer;
+class Feedback implements Serializable {
+
+    private String givenFeedback, writer;
 
 
     public Feedback(String text, String writer){
@@ -25,4 +27,5 @@ class Feedback {
     public String getWriter() {
         return writer;
     }
+
 }

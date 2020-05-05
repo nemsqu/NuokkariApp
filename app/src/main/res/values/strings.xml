@@ -2,7 +2,7 @@
     <string name="app_name">Nuokkari App</string>
     <string name="tapahtumat">Tapahtumat</string>
     <string name="kayttaja">Käyttäjä</string>
-    <string name="lis_tapahtuma">LISÄÄ TAPAHTUMA</string>
+    <string name="lis_tapahtuma">LISÄÄ UUSI TAPAHTUMA</string>
     <string name="kirjaudu_sis_n">KIRJAUDU SISÄÄN</string>
     <string name="title_activity_login">Kirjaudu sisään</string>
     <string name="profile">Profiili</string>
@@ -27,4 +27,6 @@
     <string name="ik_haarukka_lk">Ikähaarukka (lk)</string>
     <string name="kuvaus">Kuvaus</string>
     <string name="k_ynnist_tapahtuma">Käynnistä tapahtuma</string>
+    <string name="title_activity_scrolling">ScrollingActivity</string>
+    <string name="action_settings">Settings</string>
 </resources>

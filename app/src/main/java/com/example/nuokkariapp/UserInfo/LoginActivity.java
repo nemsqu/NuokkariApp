@@ -3,21 +3,21 @@ package com.example.nuokkariapp.UserInfo;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.nuokkariapp.MainActivity;
 import com.example.nuokkariapp.R;
 
 public class LoginActivity extends AppCompatActivity {
 
-    Button login;
-    TextView register;
-    TextView email;
-    TextView password;
-    UserLocalStorage userLocalStorage;
+    private Button login;
+    private TextView register, email, password;
+    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,15 +27,43 @@ public class LoginActivity extends AppCompatActivity {
         register = (TextView) findViewById(R.id.textViewNewUser);
         email = (TextView) findViewById(R.id.editTextLoginEmail);
         password = (TextView) findViewById(R.id.editTextLoginPassword);
-        userLocalStorage = new UserLocalStorage(this);
+        databaseHelper = new DatabaseHelper(this);
     }
 
+    //compares given information to information in databse
     public void login(View v){
-        User user = new User(email.getText().toString(), password.getText().toString());
-        userLocalStorage.storeUserData(user);
-        userLocalStorage.setUserLoggedIn(true);
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        Cursor cursor = databaseHelper.getInformation(db);
+        String userEmail = email.getText().toString();
+        String userPassword = password.getText().toString();
+        String userName = "", userPhone = "";
+        boolean correctInfo = false;
+        while(cursor.moveToNext()){
+            String compareEmail = cursor.getString(cursor.getColumnIndex("userEmail"));
+            userName = cursor.getString(cursor.getColumnIndex("userName"));
+            userPhone = cursor.getString(cursor.getColumnIndex("userPhone"));
+            String comparePassword = cursor.getString(cursor.getColumnIndex("userPassword"));
+            if(compareEmail.equals(userEmail) && comparePassword.equals(userPassword)){
+                correctInfo = true;
+                break;
+            }
+        }
+        if(correctInfo) {
+            User user = new User(userName, userPhone, email.getText().toString(), password.getText().toString());
+            Cursor idCursor = databaseHelper.getID(email.getText().toString());
+            int userID = -1;
+            while(idCursor.moveToNext()){
+                userID = idCursor.getInt(0);
+            }
+            user.setID(userID);
+            Intent intent = new Intent(this, UserCheckActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("user", user);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }else{
+            Toast.makeText(this, "Väärä käyttäjänimi tai salasana", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void register(View v){

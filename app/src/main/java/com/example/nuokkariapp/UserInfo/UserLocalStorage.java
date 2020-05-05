@@ -1,46 +1,52 @@
 package com.example.nuokkariapp.UserInfo;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import java.io.Serializable;
 
-public class UserLocalStorage {
+public class UserLocalStorage implements Serializable {
 
-    public static final String sharedPreferenceName = "UserDetails";
-    SharedPreferences userLocalDatabase;
+    public static UserLocalStorage userLocalStorage = new UserLocalStorage();
+    private String name, email, phone, password;
+    private int userID;
+    private boolean loggedIn;
+    private User loggedInUser;
 
-    //creates shared preferences
-    public UserLocalStorage(Context context){
-        userLocalDatabase = context.getSharedPreferences(sharedPreferenceName, 0);
+    private UserLocalStorage(){
+        name = "";
+        email = "";
+        phone = "";
+        password = "";
+        userID = -1;
+        loggedIn = false;
     }
 
-    public void storeUserData(User user){
-        SharedPreferences.Editor spEditor = userLocalDatabase.edit();
-        spEditor.putString("name", user.name);
-        spEditor.putString("email", user.email);
-        spEditor.putString("phone", user.phoneNumber);
-        spEditor.putString("password", user.password);
-        spEditor.commit();
+    public static UserLocalStorage getInstance(){
+        return userLocalStorage;
     }
 
-    public User getCurrentUser(){
-        String name = userLocalDatabase.getString("name", "");
-        String email = userLocalDatabase.getString("email", "");
-        String phone = userLocalDatabase.getString("phone", "");
-        String password = userLocalDatabase.getString("password", "");
+    public void setLoggedInUser(User user){
+        name = user.getName();
+        email = user.getEmail();
+        phone = user.getPhoneNumber();
+        password = user.getPassword();
+        userID = user.getID();
+        loggedIn = true;
+        loggedInUser = new User(name, phone, email, password, userID);
+    }
 
-        User loggedInUser = new User(name, email, phone, password);
+    public User getLoggedInUser(){
         return loggedInUser;
     }
 
-    public void setUserLoggedIn(boolean signedIn){
-        SharedPreferences.Editor editor = userLocalDatabase.edit();
-        editor.putBoolean("signedIn", signedIn);
-        editor.commit();
+    public void logUserOut(){
+        name = "";
+        email = "";
+        phone = "";
+        password = "";
+        userID = -1;
+        loggedIn = false;
     }
 
-    public void clearUserData(){
-        SharedPreferences.Editor editor = userLocalDatabase.edit();
-        editor.clear();
-        editor.commit();
+    public boolean isLoggedIn() {
+        return loggedIn;
     }
 }
