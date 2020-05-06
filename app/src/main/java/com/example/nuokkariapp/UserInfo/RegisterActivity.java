@@ -2,11 +2,14 @@ package com.example.nuokkariapp.UserInfo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -35,6 +38,15 @@ public class RegisterActivity extends AppCompatActivity {
         password.setText("");
         confirmPassword = (EditText) findViewById(R.id.editTextConfirmPassword);
         confirmPassword.setText("");
+        confirmPassword.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            InputMethodManager imm = (InputMethodManager) getBaseContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            assert imm != null;
+            imm.hideSoftInputFromWindow(confirmPassword.getWindowToken(), 0);
+            return true;
+            }
+        });
         register = (Button) findViewById(R.id.buttonLogin);
         databaseHelper = new DatabaseHelper(this);
         passwordValidityChecker = new PasswordValidityChecker();

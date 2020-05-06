@@ -8,7 +8,7 @@ public class Event implements Serializable {
     private String name, location, date, start, end, age, description, imageUri;
     private int index, visitorLimit, visitorCount, ID;
     private boolean isOnGoing = false;
-    ArrayList<Feedback> eventFeedbacks;
+    private ArrayList<Feedback> eventFeedbacks;
 
     public Event(String name, String location, String date, String start, String end, String age, int limit, String description, String uri, int ID){
         this.name = name;

@@ -2,9 +2,12 @@ package com.example.nuokkariapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -39,6 +42,15 @@ public class OnGoingEventActivity extends AppCompatActivity {
         titleWriter = (TextView)findViewById(R.id.titleWriter);
         feedbackBox = (EditText) findViewById(R.id.feebackBox);
         writer = (EditText) findViewById(R.id.writerName);
+        writer.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                InputMethodManager imm = (InputMethodManager) getBaseContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                assert imm != null;
+                imm.hideSoftInputFromWindow(writer.getWindowToken(), 0);
+                return true;
+            }
+        });
         anonym = (CheckBox) findViewById(R.id.checkBoxAnonym);
         visitorLeft = (Button) findViewById(R.id.buttonVisitorLeft);
         visitorCame = (Button) findViewById(R.id.buttonVisitorCame);
@@ -117,8 +129,6 @@ public class OnGoingEventActivity extends AppCompatActivity {
                 String stringDate = onGoingEvent.getDate();
                 try {
                     Date date = format.parse(stringDate);
-                    System.out.println(date);
-                    System.out.println(e.getRecurringUntil());
                     if(!date.before(e.getRecurringUntil())){
                         EventCollection.getInstance().getRecurringEventArrayList().remove(e.getIndex());
                         EventArchive.getInstance().addEventToArchive(onGoingEvent);

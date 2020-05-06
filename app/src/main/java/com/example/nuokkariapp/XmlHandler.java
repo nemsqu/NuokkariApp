@@ -134,9 +134,6 @@ public class XmlHandler {
             StreamResult streamResult = new StreamResult(new File(xmlFilePath));
 
             transformer.transform(domSource, streamResult);
-
-            System.out.println("Done creating XML File");
-
         } catch (ParserConfigurationException pce) {
             pce.printStackTrace();
         } catch (TransformerException tfe) {

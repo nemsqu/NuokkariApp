@@ -4,14 +4,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.nuokkariapp.UserInfo.LoginActivity;
 import com.example.nuokkariapp.UserInfo.ProfileActivity;
 import com.example.nuokkariapp.UserInfo.UserLocalStorage;
@@ -20,17 +25,18 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements EventViewAdapter.OnEventListener {
 
-    TextView titleEvents, titleUser, userName, userEmail;
-    RecyclerView recyclerView;
-    ImageView profilePic;
-    boolean signedIn = false;
-    Button addEvent, userInfo, search;
-    UserLocalStorage userLocalStorage;
-    ConstraintLayout layout;
-    RecyclerView.LayoutManager layoutManager;
-    RecyclerView.Adapter rvAdapter;
-    EventCollection eventCollection;
-    EditText searchBox;
+    private TextView titleEvents, titleUser, userName, userEmail;
+    private RecyclerView recyclerView;
+    private ImageView profilePic;
+    private boolean signedIn = false;
+    private Button addEvent, userInfo, search;
+    private UserLocalStorage userLocalStorage;
+    private ConstraintLayout layout;
+    private RecyclerView.LayoutManager layoutManager;
+    private RecyclerView.Adapter rvAdapter;
+    private EventCollection eventCollection;
+    private EditText searchBox;
+    private ArrayList<Event> eventArrayList;
 
 
     @Override
@@ -51,7 +57,8 @@ public class MainActivity extends AppCompatActivity implements EventViewAdapter.
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        rvAdapter = new EventViewAdapter(eventCollection.getEventArrayList(), this);
+        eventArrayList = eventCollection.getEventArrayList();
+        rvAdapter = new EventViewAdapter(eventArrayList, this);
         recyclerView.setAdapter(rvAdapter);
         userLocalStorage = UserLocalStorage.getInstance();
         if(!signedIn){
@@ -67,18 +74,26 @@ public class MainActivity extends AppCompatActivity implements EventViewAdapter.
     }
 
     public void createEvent(View v){
-        Event event = new Event("", "", "", "", "", "", 200, "", "", 0);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("event", event);
-        Intent intent = new Intent(this, AddEventActivity.class);
-        intent.putExtras(bundle);
-        intent.putExtra("reused", false);
-        startActivity(intent);
+        if(signedIn) {
+            Event event = new Event("", "", "", "", "", "", 200, "", "", 0);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("event", event);
+            Intent intent = new Intent(this, AddEventActivity.class);
+            intent.putExtras(bundle);
+            intent.putExtra("reused", false);
+            startActivity(intent);
+        }else{
+            Toast.makeText(this, "Kirjaudu ensin sisään", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void reuseEvent(View v){
-        Intent intent = new Intent(this, ReuseEventActivity.class);
-        startActivity(intent);
+        if(signedIn) {
+            Intent intent = new Intent(this, ReuseEventActivity.class);
+            startActivity(intent);
+        }else{
+            Toast.makeText(this, "Kirjaudu ensin sisään", Toast.LENGTH_SHORT).show();
+        }
     }
 
     //button pressed to either sign in or to modify user information
@@ -114,25 +129,32 @@ public class MainActivity extends AppCompatActivity implements EventViewAdapter.
     //open event from recyclerview according to its state when it is clicked
     @Override
     public void onEventClick(int position) {
-            Event chosenEvent = eventCollection.getEventArrayList().get(position);
-            if(chosenEvent.isOnGoing()){
+            Event chosenEvent = eventArrayList.get(position);
+            if(chosenEvent.isOnGoing() && signedIn){
                 Intent intent = new Intent(this, OnGoingEventActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("event", chosenEvent);
                 intent.putExtras(bundle);
                 startActivity(intent);
-            }else {
+            }else if(!chosenEvent.isOnGoing() && signedIn){
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("chosenEvent", chosenEvent);
                 Intent intent = new Intent(this, EventInfoActivity.class);
                 intent.putExtras(bundle);
                 intent.putExtra("position", position + 1);
                 startActivity(intent);
+            }else{
+                Toast.makeText(this, "Kirjaudu ensin sisään", Toast.LENGTH_SHORT).show();
             }
     }
 
     //search events by description
     public void search(View v){
+        InputMethodManager inputManager = (InputMethodManager)
+                getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        assert inputManager != null;
+        inputManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         String text = searchBox.getText().toString();
         ArrayList<Event> events = EventCollection.getInstance().getEventArrayList();
         ArrayList<Event> filteredEvents = new ArrayList<>();
@@ -145,7 +167,8 @@ public class MainActivity extends AppCompatActivity implements EventViewAdapter.
                 }
             }
         }
-        rvAdapter = new EventViewAdapter(filteredEvents, this);
+        eventArrayList = filteredEvents;
+        rvAdapter = new EventViewAdapter(eventArrayList, this);
         recyclerView.setAdapter(rvAdapter);
     }
 }

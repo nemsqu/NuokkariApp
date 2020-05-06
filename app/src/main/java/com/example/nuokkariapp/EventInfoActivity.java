@@ -94,8 +94,6 @@ public class EventInfoActivity extends AppCompatActivity implements DatePickerDi
         }
         for(RecurringEvent e : EventCollection.getInstance().getRecurringEventArrayList()){
             if(chosenEvent.getID() == e.getID()){
-                System.out.println(chosenEvent.getID());
-                System.out.println(e.getID());
                 if(e.isRecurringDaily()){
                     seekBar.setProgress(1);
                 }else if(e.isRecurringWeekly()){
@@ -153,7 +151,6 @@ public class EventInfoActivity extends AppCompatActivity implements DatePickerDi
         }
         try {
             Date check = new SimpleDateFormat("dd.MM.yyyy").parse(date.getText().toString());
-            System.out.println(check);
         } catch (ParseException e) {
             Toast.makeText(this, "Anna päivämäärä muodossa 'pp.kk.vvvv'.", Toast.LENGTH_LONG).show();
             e.printStackTrace();
@@ -206,7 +203,6 @@ public class EventInfoActivity extends AppCompatActivity implements DatePickerDi
                 if(progressValue == 0){
                     EventCollection.getInstance().getRecurringEventArrayList().remove(chosenRecurrence.getIndex());
                 }else if(progressValue == 1){
-                    System.out.println("TÄNNE PÄÄSTIIN, " + chosenEndDate);
                     chosenRecurrence.setRecurringDaily(true);
                     chosenRecurrence.setRecurringUntil(chosenEndDate);
                     EventCollection.getInstance().modifyEventOnList(chosenRecurrence, chosenRecurrence.getIndex());

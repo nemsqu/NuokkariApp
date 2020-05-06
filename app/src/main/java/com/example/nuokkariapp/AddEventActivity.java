@@ -97,7 +97,6 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
                 EventArchive.getInstance().removeEvent(chosenEvent);
             }
             EventCollection.getInstance().setTemporaryStore(null);
-            Toast.makeText(this, Integer.toString(newEvent.getID()), Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
@@ -172,6 +171,9 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
         age.setText(chosenEvent.getAge());
         visitorLimit.setText(Integer.toString(chosenEvent.getVisitorLimit()));
         description.setText(chosenEvent.getDescription());
+        if(!chosenEvent.getImageURI().equals("")) {
+            imageView.setImageURI(Uri.parse(chosenEvent.getImageURI()));
+        }
         if(EventCollection.getInstance().getTemporaryStore() != null){
             Event temporaryStore = EventCollection.getInstance().getTemporaryStore();
             name.setText(temporaryStore.getName());

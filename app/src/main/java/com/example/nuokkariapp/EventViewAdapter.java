@@ -13,10 +13,11 @@ import java.util.ArrayList;
 
 class EventViewAdapter extends RecyclerView.Adapter<EventViewAdapter.MyViewHolder> {
 
-    ArrayList<Event> eventsList = new ArrayList<>();
+    ArrayList<Event> eventsList;
     private OnEventListener globalOnEventListener;
 
     public EventViewAdapter(ArrayList<Event> events, OnEventListener onEventListener) {
+        eventsList = new ArrayList<>();
         eventsList.addAll(events);
         globalOnEventListener = onEventListener;
     }
@@ -63,4 +64,5 @@ class EventViewAdapter extends RecyclerView.Adapter<EventViewAdapter.MyViewHolde
         void onEventClick(int position);
 
     }
+
 }
