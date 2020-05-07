@@ -129,12 +129,13 @@ public class OnGoingEventActivity extends AppCompatActivity {
                 String stringDate = onGoingEvent.getDate();
                 try {
                     Date date = format.parse(stringDate);
-                    if(!date.before(e.getRecurringUntil())){
+                    long dateLong = date.getTime() + e.getDifferenceBetweenEvents();
+                    String dateString = new SimpleDateFormat("dd.MM.yyyy").format(new Date(dateLong));
+                    Date newDate = format.parse(dateString);
+                    if(!newDate.before(e.getRecurringUntil())){
                         EventCollection.getInstance().getRecurringEventArrayList().remove(e.getIndex());
                         EventArchive.getInstance().addEventToArchive(onGoingEvent);
                     }else{
-                        long dateLong = date.getTime() + e.getDifferenceBetweenEvents();
-                        String dateString = new SimpleDateFormat("dd.MM.yyyy").format(new Date(dateLong));
                         onGoingEvent.setDate(dateString);
                         onGoingEvent.setIndex(EventCollection.getInstance().getEventArrayList().size());
                         EventCollection.getInstance().addEventToList(onGoingEvent);

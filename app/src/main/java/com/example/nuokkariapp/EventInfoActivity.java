@@ -181,6 +181,7 @@ public class EventInfoActivity extends AppCompatActivity implements DatePickerDi
         chosenEvent.setAge(age.getText().toString());
         chosenEvent.setVisitorLimit(Integer.parseInt(visitorLimit.getText().toString()));
         chosenEvent.setDescription(description.getText().toString());
+        chosenEvent.setImageURI(imageView.getTag().toString());
         EventCollection.getInstance().modifyEventOnList(chosenEvent, chosenEvent.getIndex());
         for(RecurringEvent chosenRecurrence : EventCollection.getInstance().getRecurringEventArrayList()){
             if(chosenRecurrence.getID() == chosenEvent.getID()){
